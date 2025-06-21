@@ -8,7 +8,11 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@tanstack/vue-query": "^5.81.0",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
     "axios": "^1.5.0",
+    "chart.js": "^4.5.0",
     "core-js": "^3.32.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -19,15 +23,17 @@
     "roboto-fontface": "*",
     "socket.io-client": "^4.7.5",
     "sweetalert2": "^11.7.28",
+    "tanstack": "^1.0.0",
     "vue": "^3.2.0",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "^4.0.0",
-    "vuetify": "^3.0.0",
+    "vuetify": "^3.8.1",
     "vuex": "^4.1.0",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.0.0",
-    "vite": "^4.2.0",
-    "vite-plugin-vuetify": "^1.0.0"
+    "@vitejs/plugin-vue": "^5.2.3",
+    "vite": "^6.2.5",
+    "vite-plugin-vuetify": "^2.0.0"
   }
 }

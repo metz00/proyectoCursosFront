@@ -1,67 +1,234 @@
 <template>
-  <v-container class="fill-height d-flex align-center justify-center" fluid>
-    <v-card class="pa-6 rounded-lg" max-width="420" width="100%" >
-      <v-card-title class="text-h5 font-weight-bold text-center pb-2">
-        Inicia sesión
-      </v-card-title>
+  <div class="login-card">
+    <h1 class="login-title">Inicia Sesión</h1>
 
-      <v-card-subtitle class="text-center mb-4 text-body-2">
-        Ingresa tu correo y contraseña 
-      </v-card-subtitle>
+    <form @submit.prevent="handleLogin" class="login-form">
+      <div v-if="error" class="error-message">Credenciales invalidas</div>
 
-      <v-card-text>
-        <v-form @submit.prevent="handleLogin" ref="form" lazy-validation>
-          <v-text-field
-            v-model="email"
-            label="Correo electrónico"
-            type="email"
-            prepend-inner-icon="mdi-email"
-            required
-            density="comfortable"
-          />
-          <v-text-field
-            v-model="password"
-            label="Contraseña"
-            type="password"
-            prepend-inner-icon="mdi-lock"
-            required
-            density="comfortable"
-          />
-          <v-btn
-            type="submit"
-            color="#41CDF0"
-            block
-            class="mt-4"
-            size="large"
-          >
-            Entrar
-          </v-btn>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-container>
+      <div class="form-group">
+        <input
+          type="email"
+          id="email"
+          v-model="user.email"
+          required
+          placeholder="Ingresa tu email"
+        />
+      </div>
+
+      <div class="form-group">
+        <input
+          type="password"
+          id="password"
+          v-model="user.password"
+          required
+          placeholder="Ingresa tu contraseña"
+        />
+      </div>
+
+      <button type="submit" class="login-btn" :disabled="isLoading">
+        {{ isLoading ? "Logging in..." : "Login" }}
+      </button>
+    </form>
+  </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { signIn } from '../services/auth.service';
-import { useAppStore } from '@/store/app.js';
+<script>
+import { useAppStore } from "@/store/app";
 
-const email = ref('');
-const password = ref('');
-const form = ref(null);
-const router = useRouter();
-const appStore = useAppStore();
+import { mixin } from "@/Server/index";
 
-const handleLogin = async () => {
-  try {
-    const { token, user } = await signIn(email.value, password.value);
-    localStorage.setItem('token', token);
-    appStore.setUserData(user);
-    router.push('/');
-  } catch (error) {
-    console.log(error)
-  }
+export default {
+  mixins: [mixin],
+  data() {
+    return {
+      user: {},
+      isLoading: false,
+      error: null,
+    };
+  },
+
+  created() {
+    this.appStore = useAppStore();
+  },
+
+  methods: {
+
+    async handleLogin() {
+      this.isLoading = true;
+      this.error = null;
+
+      try {
+        const response = await this.peticionApi({
+          method: "POST",
+          api: "auths/local/sign-in",
+          data: {
+            email: this.user.email,
+            password: this.user.password,
+          },
+        });
+
+        this.$router.push("/");
+
+        console.log("Login successful");
+      } catch (error) {
+        console.error("Error de login:", error);
+        this.error =
+          "Error al iniciar sesión: " +
+          (error.response?.data?.message || "Error del servidor");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
 };
 </script>
+
+<style scoped>
+.login-card {
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+  background: white;
+  border-radius: 8px;
+  padding: 40px;
+  width: 100%;
+  max-width: 320px;
+  max-height: auto;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+}
+
+.login-title {
+  text-align: center;
+  margin-top: -25px;
+  margin-bottom: 4px;
+  font-size: 24px;
+  color: #333;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #444;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.google-btn:hover {
+  background-color: #f8f8f8;
+}
+
+.google-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  color: #888;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.divider span {
+  padding: 0 10px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 8px;
+  background-color: #557728;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 8px;
+  margin-bottom: -20px;
+}
+
+.login-btn:hover {
+  background-color: #2d3d18;
+}
+
+.login-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px;
+    max-width: 60%;
+    box-sizing: border-box;
+  }
+
+  .login-title {
+    font-size: 22px;
+    margin-top: -18px;
+  }
+
+  .form-group input {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px;
+    max-width: 70%;
+    box-sizing: border-box;
+    padding: 25px;
+  }
+
+  .login-btn,
+  .google-btn {
+    padding: 10px;
+  }
+}
+</style>
