@@ -1,6 +1,6 @@
 <template>
-  <v-card elevation="3" class="ma-2" max-width="280" rounded="lg">
-    <v-img :src="course.image" height="150" class="mt-3" cover />
+  <v-card elevation="3" class="ma-2" max-width="280" rounded="xl">
+    <v-img :src="course.image" height="150" class="mt-0" cover />
 
     <v-card-title class="text-subtitle-1 font-weight-bold">
       {{ course.course }}

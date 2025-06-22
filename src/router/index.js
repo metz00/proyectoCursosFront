@@ -20,6 +20,8 @@ const routes = [
           })
           .then((response) => {
             appStore.$state.userData = response;
+            console.log(response)
+            //vistas rol
             next();
           })
           .catch((error) => {
@@ -60,6 +62,8 @@ const routes = [
     path: "/auth/sign-up",
     component: () => import("@/modules/Auth/views/Sign-up.vue"),
   },
+
+  
 ];
 
 const router = createRouter({

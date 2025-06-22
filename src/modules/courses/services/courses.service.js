@@ -8,7 +8,6 @@ export const get = async (page = 1, limit = 100) => {
       `${useAppStore().$state.apiURL}/courses?page=${page}&limit=${limit}`,
     );
     if (data.error) throw new Error(data.message);
-    console.log(data)
     return data; 
   } catch (error) {
     const message = error.message || "Ocurrió un error inesperado";
@@ -36,6 +35,7 @@ export const create = async (payload) => {
       }
     );
     if (data.error) throw new Error(data.message);
+    alerts.showSuccess("Curso agregado correctamente")
     return data;
   } catch (error) {
     const message = error.message || "Ocurrio un error inesperado";

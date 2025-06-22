@@ -4,7 +4,7 @@ import { get } from "../services/categories.service";
 
 const useCategories = (page, limit) => {
   const query = useQuery({
-    queryKey: () => ["categories", page, limit],
+    queryKey: () => ["categories", page.value, limit.value],
     queryFn: () => get(page?.value || 1, limit?.value || 9999),
     staleTime: 10 * 60 * 1000,
     suspense: false,
@@ -14,7 +14,7 @@ const useCategories = (page, limit) => {
     return query.isSuccess.value ? query.data.value.data || [] : [];
   });
   const pagination = computed(() => {
-    query.isSuccess.value ? query.data.value.pagination || {} : {};
+    return query.isSuccess.value ? query.data.value.page || {} : {};
   });
   return {
     categories,

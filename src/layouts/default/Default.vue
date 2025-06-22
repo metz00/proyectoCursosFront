@@ -1,12 +1,11 @@
 <template>
-
-    <v-app class="app-background" >
+  <v-app class="app-background">
     <v-app-bar app color="#ffffff" dark class="elevation-8">
       <v-app-bar-nav-icon @click="toggleDrawer" />
       <v-toolbar-title>
         <b>Dev Cursos Admin</b>
       </v-toolbar-title>
-      <v-btn class="logout-btn mr-5" variant="outlined" @click="logout">
+      <v-btn class="logout-btn mr-5" variant="outlined" @click="logout" rounded="xl">
         Cerrar sesión
       </v-btn>
     </v-app-bar>
@@ -22,7 +21,7 @@
               />
             </v-avatar>
             <h3 class="mt-5 user-text">
-              {{ appStore.userData?.email || 'Usuario' }}
+              {{ appStore.userData?.email || "Usuario" }}
             </h3>
           </v-col>
         </v-row>
@@ -66,17 +65,17 @@
     </v-navigation-drawer>
 
     <v-main class="scroll-container">
-    
-      <router-view></router-view>
+      <div class="px-8"> 
+        <router-view></router-view>
+      </div>
     </v-main>
   </v-app>
-
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAppStore } from '@/store/app';
+import { ref, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useAppStore } from "@/store/app";
 
 const drawer = ref(true);
 const appStore = useAppStore();
@@ -87,16 +86,19 @@ const toggleDrawer = () => {
 };
 
 const logout = () => {
-  localStorage.removeItem('token');
-  router.push('/auth/sign-in');
+  localStorage.removeItem("token");
+  router.push("/auth/sign-in");
 };
 
-watch(() => appStore.$state.vuetify?.breakpoint?.lgAndUp, (val) => {
-  drawer.value = val;
-});
+watch(
+  () => appStore.$state.vuetify?.breakpoint?.lgAndUp,
+  (val) => {
+    drawer.value = val;
+  }
+);
 
 onMounted(() => {
-  const userData = JSON.parse(localStorage.getItem('user'));
+  const userData = JSON.parse(localStorage.getItem("user"));
   if (userData) {
     appStore.userData = { data: userData };
   }
@@ -109,7 +111,7 @@ onMounted(() => {
   padding: 0;
 }
 .app-background {
-  background-color: #C8D2D7;
+  background-color: #c8d2d7;
 }
 .navigation-drawer {
   background-color: #ffffff;
@@ -132,7 +134,7 @@ onMounted(() => {
   margin: 5px 20px;
   color: black;
 }
-.user-text{
+.user-text {
   color: #005073;
 }
 

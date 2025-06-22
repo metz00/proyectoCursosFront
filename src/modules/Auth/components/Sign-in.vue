@@ -67,7 +67,7 @@ export default {
           },
         });
 
-        this.$router.push("/");
+        this.$router.push("/Dashboard");
 
         console.log("Login successful");
       } catch (error) {

@@ -24,7 +24,7 @@ const toggleStatus = async (item) => {
     await updateCategory({
         id: item.id,
         category: item.category,
-        active: item.active
+        active: !item.active
     })
 }
 
@@ -35,7 +35,7 @@ watch(props, ()=> {
 
 <template>
  
-  <v-card flat width="1000px" class="mt-5">
+  <v-card flat width="1000px" class="mt-5" rounded="xl" >
     <v-card-title class="d-flex align-center pe-2">
       <v-icon icon="mdi-format-list-bulleted-type"></v-icon> &nbsp; Listado de
       categorías
