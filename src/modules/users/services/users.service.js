@@ -6,6 +6,7 @@ export const get = async () => {
   try {
     const { data } = await axios.get(`${useAppStore().$state.apiURL}/users`);
     if (data.error) throw new Error(data.message);
+    console.log(data)
     return data;
   } catch (error) {
     const message =

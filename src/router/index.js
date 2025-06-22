@@ -2,12 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import { mixin } from "@/Server/index";
 import { useAppStore } from "@/store/app";
 
-
 const routes = [
   {
     path: "/",
 
-       beforeEnter: (to, from, next) => {
+    beforeEnter: (to, from, next) => {
       const appStore = useAppStore();
       const token = localStorage.getItem("token");
       if (!token) {
@@ -20,9 +19,12 @@ const routes = [
           })
           .then((response) => {
             appStore.$state.userData = response;
-            console.log(response)
-            //vistas rol
-            next();
+            console.log("usuario", response);
+            if (response.role === "admin") {
+              next();
+            } else {
+              next("/home");
+            }
           })
           .catch((error) => {
             console.error("Error al obtener datos del usuario:", error);
@@ -31,10 +33,9 @@ const routes = [
           });
       }
     },
-        component: () => import("@/layouts/default/Default.vue"),
+    component: () => import("@/layouts/admin/Default.vue"),
 
     children: [
-
       {
         path: "Dashboard",
         component: () => import("@/modules/dashboard/views/Dashboard.vue"),
@@ -62,8 +63,10 @@ const routes = [
     path: "/auth/sign-up",
     component: () => import("@/modules/Auth/views/Sign-up.vue"),
   },
-
-  
+    {
+    path: "/home",
+    component: () => import("@/layouts/user/Default.vue"),
+  },
 ];
 
 const router = createRouter({

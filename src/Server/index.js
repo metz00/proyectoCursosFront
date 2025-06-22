@@ -25,7 +25,6 @@ export const mixin = {
         });
 
         const resData = response.data;
-        console.log("resData: ", resData);
         
         if (resData.data && resData.data.token && resData.data.user) {
           localStorage.setItem("token", resData.data.token);

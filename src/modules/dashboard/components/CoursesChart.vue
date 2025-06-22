@@ -1,11 +1,4 @@
-<template>
-  <v-card class="pa-4" elevation="2">
-    <v-card-title>Vistas de cursos por mes</v-card-title>
-    <v-card-text>
-      <Bar :data="chartData" :options="chartOptions" />
-    </v-card-text>
-  </v-card>
-</template>
+
 
 <script setup>
 import {
@@ -49,3 +42,11 @@ const chartOptions = {
   },
 };
 </script>
+<template>
+  <v-card class="pa-4" elevation="2" rounded="xl">
+    <v-card-title>Vistas de cursos por mes</v-card-title>
+    <v-card-text>
+      <Bar :data="chartData" :options="chartOptions" />
+    </v-card-text>
+  </v-card>
+</template>

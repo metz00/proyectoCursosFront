@@ -109,11 +109,5 @@ const handleUpdateCategory = (payload) => {
   display: flex;
   justify-content: end;
 }
-.pagination-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
+
 </style>

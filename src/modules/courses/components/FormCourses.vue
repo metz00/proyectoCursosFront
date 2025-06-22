@@ -4,12 +4,11 @@ import { useVuelidate } from "@vuelidate/core";
 import useValidators from "@/shared/composables/useValidators";
 import option from "@/shared/Helpers/options.json";
 import useCategories from "@/modules/categories/composables/useGetCategories";
-const page = ref(1)
-const limit = ref(5)
-const {categories} = useCategories(page, limit);
+const page = ref(1);
+const limit = ref(5);
+const { categories } = useCategories(page, limit);
 
-
-const { notEmpty$ } = useValidators();
+const { notEmpty$, maxImageSize$ } = useValidators();
 const options = option.options;
 
 const props = defineProps({
@@ -36,6 +35,7 @@ watch(props, () => {
 const rules = {
   course: { notEmpty: notEmpty$() },
   active: { notEmpty: notEmpty$() },
+  image: { maxImageSize: maxImageSize$() },
 };
 
 const v$ = useVuelidate(rules, data);
@@ -84,7 +84,7 @@ const save = () => {
       </v-toolbar>
 
       <v-card-text class="pa-6">
-        <v-card-subtitle class="text-subtitle-1 text-grey-darken-2 mb-4">
+        <v-card-subtitle class="text-subtitle-1 text-grey-darken-2 mb-1 mt-n5 mb-4">
           Complete los campos para registrar un nuevo curso
         </v-card-subtitle>
 
@@ -97,6 +97,8 @@ const save = () => {
         />
 
         <v-file-input
+          :error="v$.image?.$error"
+          :error-messages="v$.image?.$error ? v$.image.$errors[0].$message : ''"
           label="Imagen del curso"
           prepend-icon="mdi-camera"
           accept="image/*"
@@ -105,7 +107,7 @@ const save = () => {
           clearable
           density="compact"
         />
-       
+
         <v-select
           label="Categoría"
           v-model="data.categoryId"
@@ -151,7 +153,7 @@ const save = () => {
           prepend-inner-icon="mdi-check-circle-outline"
         />
 
-        <v-card-actions class="justify-end mt-4">
+        <v-card-actions class="justify-end mt-n2 mb-n2">
           <v-btn variant="text" @click="closeModal">Cancelar</v-btn>
           <v-btn color="#3CDCF0" @click="save" prepend-icon="mdi-content-save">
             Guardar

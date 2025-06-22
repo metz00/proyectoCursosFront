@@ -1,25 +1,25 @@
 <script setup>
-import { ref, watch } from "vue"
-import { useVuelidate } from "@vuelidate/core"
-import useValidators from "@/shared/composables/useValidators"
-import option from "@/shared/Helpers/options.json"
+import { ref, watch } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import useValidators from "@/shared/composables/useValidators";
+import option from "@/shared/Helpers/options.json";
 import useCategories from "@/modules/categories/composables/useGetCategories";
-const page = ref(1)
-const limit = ref(5)
-const {categories} = useCategories(page, limit);
+const page = ref(1);
+const limit = ref(5);
+const { categories } = useCategories(page, limit);
 
-const { notEmpty$ } = useValidators()
-const options = option.options
+const { notEmpty$, maxImageSize$ } = useValidators();
+const options = option.options;
 
 const props = defineProps({
   open: Boolean,
   courseData: Object,
-})
+});
 
-const emits = defineEmits(["update", "close"])
+const emits = defineEmits(["update", "close"]);
 
-const openModal = ref(false)
-const previewImage = ref(null)
+const openModal = ref(false);
+const previewImage = ref(null);
 
 const data = ref({
   id: null,
@@ -28,41 +28,42 @@ const data = ref({
   categoryId: "",
   active: true,
   image: null,
-  imageId: "", 
-})
+  imageId: "",
+});
 
 watch(
   () => props.open,
   () => {
-    openModal.value = props.open
+    openModal.value = props.open;
     if (props.courseData) {
-      data.value = { ...props.courseData, image: null }
-      previewImage.value = props.courseData.imageId
+      data.value = { ...props.courseData, image: null };
+      previewImage.value = props.courseData.imageId;
     }
   },
   { immediate: true }
-)
+);
 
 const rules = {
   course: { notEmpty: notEmpty$() },
   active: { notEmpty: notEmpty$() },
-}
+  image: { maxImageSize: maxImageSize$() },
+};
 
-const v$ = useVuelidate(rules, data)
+const v$ = useVuelidate(rules, data);
 
 const handleFileUpload = (event) => {
-  const file = event.target.files?.[0] || event
+  const file = event.target.files?.[0] || event;
   if (file) {
-    data.value.image = file
-    const reader = new FileReader()
-    reader.onload = (e) => (previewImage.value = e.target.result)
-    reader.onerror = () => (previewImage.value = null)
-    reader.readAsDataURL(file)
+    data.value.image = file;
+    const reader = new FileReader();
+    reader.onload = (e) => (previewImage.value = e.target.result);
+    reader.onerror = () => (previewImage.value = null);
+    reader.readAsDataURL(file);
   }
-}
+};
 
 const closeModal = () => {
-  v$.value.$reset()
+  v$.value.$reset();
   data.value = {
     id: null,
     course: "",
@@ -71,17 +72,17 @@ const closeModal = () => {
     active: true,
     image: null,
     imageId: "",
-  }
-  previewImage.value = null
-  emits("close")
-}
+  };
+  previewImage.value = null;
+  emits("close");
+};
 
 const update = () => {
-  v$.value.$validate()
-  if (v$.value.$error) return
-  emits("update", data.value)
-  closeModal()
-}
+  v$.value.$validate();
+  if (v$.value.$error) return;
+  emits("update", data.value);
+  closeModal();
+};
 </script>
 
 <template>
@@ -109,6 +110,8 @@ const update = () => {
         />
 
         <v-file-input
+          :error="v$.image?.$error"
+          :error-messages="v$.image?.$error ? v$.image.$errors[0].$message : ''"
           label="Cambiar imagen del curso"
           prepend-icon="mdi-camera"
           accept="image/*"
@@ -162,7 +165,11 @@ const update = () => {
 
         <v-card-actions class="justify-end mt-4">
           <v-btn variant="text" @click="closeModal">Cancelar</v-btn>
-          <v-btn color="#3CDCF0" @click="update" prepend-icon="mdi-content-save">
+          <v-btn
+            color="#3CDCF0"
+            @click="update"
+            prepend-icon="mdi-content-save"
+          >
             Actualizar
           </v-btn>
         </v-card-actions>
@@ -170,4 +177,3 @@ const update = () => {
     </v-card>
   </v-dialog>
 </template>
-

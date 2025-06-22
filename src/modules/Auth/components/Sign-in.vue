@@ -28,13 +28,18 @@
       <button type="submit" class="login-btn" :disabled="isLoading">
         {{ isLoading ? "Logging in..." : "Login" }}
       </button>
+
+      <div class="signup-link">
+        <p>¿No tienes cuenta? 
+          <router-link to="/auth/sign-up" class="signup-text">Regístrate</router-link>
+        </p>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
 import { useAppStore } from "@/store/app";
-
 import { mixin } from "@/Server/index";
 
 export default {
@@ -52,7 +57,6 @@ export default {
   },
 
   methods: {
-
     async handleLogin() {
       this.isLoading = true;
       this.error = null;
@@ -68,7 +72,6 @@ export default {
         });
 
         this.$router.push("/Dashboard");
-
         console.log("Login successful");
       } catch (error) {
         console.error("Error de login:", error);
@@ -85,17 +88,15 @@ export default {
 
 <style scoped>
 .login-card {
-  display: flex;
-  flex-direction: column;
-  z-index: 3;
+  width: 100%;
+  max-width: 400px;
   background: white;
   border-radius: 8px;
   padding: 40px;
-  width: 100%;
-  max-width: 320px;
-  max-height: auto;
-  transform: translateY(0);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
 }
 
 .login-card:hover {
@@ -105,51 +106,9 @@ export default {
 .login-title {
   text-align: center;
   margin-top: -25px;
-  margin-bottom: 4px;
-  font-size: 24px;
+  margin-bottom: 24px;
+  font-size: 28px;
   color: #333;
-}
-
-.google-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 8px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-  color: #444;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.google-btn:hover {
-  background-color: #f8f8f8;
-}
-
-.google-logo {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  color: #888;
-}
-
-.divider::before,
-.divider::after {
-  content: "";
-  flex: 1;
-  border-bottom: 1px solid #ddd;
-}
-
-.divider span {
-  padding: 0 10px;
 }
 
 .login-form {
@@ -165,10 +124,16 @@ export default {
 }
 
 .form-group input {
-  padding: 8px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #005073;
 }
 
 .error-message {
@@ -176,12 +141,15 @@ export default {
   font-size: 14px;
   text-align: center;
   margin-bottom: 10px;
+  padding: 8px;
+  background-color: #ffeaea;
+  border-radius: 4px;
 }
 
 .login-btn {
   width: 100%;
-  padding: 8px;
-  background-color: #557728;
+  padding: 12px;
+  background-color: #005073;
   color: white;
   border: none;
   border-radius: 4px;
@@ -189,11 +157,11 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 8px;
-  margin-bottom: -20px;
+  margin-bottom: 0px;
 }
 
-.login-btn:hover {
-  background-color: #2d3d18;
+.login-btn:hover:not(:disabled) {
+  background-color: #0F2D3C;
 }
 
 .login-btn:disabled {
@@ -201,34 +169,99 @@ export default {
   cursor: not-allowed;
 }
 
+.signup-link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.signup-link p {
+  margin: 0;
+  color: #666;
+}
+
+.signup-text {
+  color: #005073;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.signup-text:hover {
+  color: #0F2D3C;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .login-card {
-    padding: 30px;
-    max-width: 60%;
+    padding: 25px 20px;
+    max-width: 90%;
+    margin: 0 auto;
     box-sizing: border-box;
   }
 
   .login-title {
-    font-size: 22px;
-    margin-top: -18px;
+    font-size: 24px;
+    margin-top: -15px;
+    margin-bottom: 20px;
   }
 
   .form-group input {
-    padding: 10px;
+    padding: 14px 12px;
+    font-size: 16px;
+  }
+
+  .login-btn {
+    padding: 14px;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .login-card {
-    padding: 30px;
-    max-width: 70%;
-    box-sizing: border-box;
-    padding: 25px;
+    padding: 20px 16px;
+    max-width: 95%;
+    border-radius: 6px;
   }
 
-  .login-btn,
-  .google-btn {
-    padding: 10px;
+  .login-title {
+    font-size: 22px;
+    margin-top: -10px;
+    margin-bottom: 18px;
+  }
+
+  .form-group input {
+    padding: 16px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+
+  .login-btn {
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+
+  .login-form {
+    gap: 14px;
+  }
+
+  .signup-link {
+    font-size: 13px;
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-card {
+    padding: 18px 14px;
+    max-width: 98%;
+  }
+
+  .login-title {
+    font-size: 20px;
+    margin-bottom: 16px;
   }
 }
 </style>
