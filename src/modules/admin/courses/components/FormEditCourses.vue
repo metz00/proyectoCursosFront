@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import useValidators from "@/shared/composables/useValidators";
 import option from "@/shared/Helpers/options.json";
-import useCategories from "@/modules/categories/composables/useGetCategories";
+import useCategories from "@/modules/admin/categories/composables/useGetCategories";
 const page = ref(1);
 const limit = ref(5);
 const { categories } = useCategories(page, limit);

@@ -4,15 +4,19 @@ import alerts from "@/shared/alerts";
 
 export const get = async (page = 1, limit = 100) => {
   try {
+    const token = localStorage.getItem("token");
     const { data } = await axios.get(
       `${useAppStore().$state.apiURL}/courses?page=${page}&limit=${limit}`,
+      {
+        headers: { ["Authorization"]: `Bearer ${token}` },
+      }
     );
     if (data.error) throw new Error(data.message);
-    return data; 
+    return data;
   } catch (error) {
     const message = error.message || "Ocurrió un error inesperado";
     alerts.showError(message);
-    return { data: [], pagination: { totalPages: 1, totalItems: 0 } }; 
+    return { data: [], pagination: { totalPages: 1, totalItems: 0 } };
   }
 };
 export const create = async (payload) => {
@@ -35,7 +39,7 @@ export const create = async (payload) => {
       }
     );
     if (data.error) throw new Error(data.message);
-    alerts.showSuccess("Curso agregado correctamente")
+    alerts.showSuccess("Curso agregado correctamente");
     return data;
   } catch (error) {
     const message = error.message || "Ocurrio un error inesperado";
@@ -63,7 +67,7 @@ export const update = async (id, payload) => {
       }
     );
     if (data.error) throw new Error(data.message);
-    alerts.showSuccess("Curso actualizado correctamente")
+    alerts.showSuccess("Curso actualizado correctamente");
     return data;
   } catch (error) {
     const message = error.message || "Ocurrio un error inesperado";
@@ -81,10 +85,10 @@ export const remove = async (id) => {
       `${useAppStore().$state.apiURL}/courses/${id}`
     );
     if (data.error) throw new Error(data.message);
-    alerts.showSuccess("Curso eliminado correctamente")
+    alerts.showSuccess("Curso eliminado correctamente");
     return data;
   } catch (error) {
-     const message = error.message || "Ocurrio un error inesperado";
+    const message = error.message || "Ocurrio un error inesperado";
     alerts.showError(message);
   }
 };

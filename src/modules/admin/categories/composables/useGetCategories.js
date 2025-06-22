@@ -13,9 +13,11 @@ const useCategories = (page, limit) => {
   const categories = computed(() => {
     return query.isSuccess.value ? query.data.value.data || [] : [];
   });
+  
   const pagination = computed(() => {
     return query.isSuccess.value ? query.data.value.page || {} : {};
   });
+  
   return {
     categories,
     pagination,

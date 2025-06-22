@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/vue-query";
 import { computed } from "vue";
-import { get } from "@/modules/courses/services/courses.service";
+import { get } from "@/modules/admin/courses/services/courses.service";
 
 const useCourses = (page, limit) => {
   const query = useQuery({

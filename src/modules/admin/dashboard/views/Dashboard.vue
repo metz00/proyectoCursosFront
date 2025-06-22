@@ -1,7 +1,7 @@
 <script setup>
-import CardsInfo from "@/modules/dashboard/components/CardsInfo.vue";
-import StudentCard from "@/modules/dashboard/components/StudentCard.vue";
-import CoursesChart from "@/modules/dashboard/components/CoursesChart.vue";
+import CardsInfo from "@/modules/admin/dashboard/components/CardsInfo.vue";
+import StudentCard from "@/modules/admin/dashboard/components/StudentCard.vue";
+import CoursesChart from "@/modules/admin/dashboard/components/CoursesChart.vue";
 </script>
 
 <template>

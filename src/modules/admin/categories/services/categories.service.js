@@ -4,14 +4,15 @@ import alert from "@/shared/alerts";
 
 export const get = async (page = 1, limit = 10) => {
   try {
+    const token = localStorage.getItem("token");
     const { data } = await axios.get(
-      `${
-        useAppStore().$state.apiURL
-      }/categories?page=${page}&limit=${limit}`
+      `${useAppStore().$state.apiURL}/categories?page=${page}&limit=${limit}`,
+      {
+        headers: { ["Authorization"]: `Bearer ${token}` },
+      }
     );
     if (data.error) throw new Error(data.message);
     return data;
-
   } catch (error) {
     const message =
       error.response?.data?.message ||
